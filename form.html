@@ -1,0 +1,117 @@
+¡Claro! Aquí tienes un ejemplo básico de un CRUD (Crear, Leer, Actualizar, Borrar) en PHP utilizando MySQL. Este ejemplo asume que tienes una base de datos llamada test_db y una tabla llamada users con las columnas id, name, y email.
+
+1. Conexión a la Base de Datos
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "test_db";
+
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar conexión
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
+}
+?>
+
+2. Crear (Insertar) un Nuevo Registro
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['create'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+
+    $sql = "INSERT INTO users (name, email) VALUES ('$name', '$email')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Nuevo registro creado exitosamente";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+?>
+
+3. Leer (Mostrar) Registros
+<?php
+$sql = "SELECT id, name, email FROM users";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        echo "ID: " . $row["id"]. " - Nombre: " . $row["name"]. " - Email: " . $row["email"]. "<br>";
+    }
+} else {
+    echo "0 resultados";
+}
+?>
+
+4. Actualizar un Registro
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+
+    $sql = "UPDATE users SET name='$name', email='$email' WHERE id=$id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Registro actualizado exitosamente";
+    } else {
+        echo "Error actualizando el registro: " . $conn->error;
+    }
+}
+?>
+
+5. Borrar un Registro
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+    $id = $_POST['id'];
+
+    $sql = "DELETE FROM users WHERE id=$id";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "Registro borrado exitosamente";
+    } else {
+        echo "Error borrando el registro: " . $conn->error;
+    }
+}
+?>
+
+6. Formulario HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD en PHP</title>
+</head>
+<body>
+    <h2>Crear Usuario</h2>
+    <form method="post">
+        Nombre: <input type="text" name="name">
+        Email: <input type="text" name="email">
+        <input type="submit" name="create" value="Crear">
+    </form>
+
+    <h2>Actualizar Usuario</h2>
+    <form method="post">
+        ID: <input type="text" name="id">
+        Nombre: <input type="text" name="name">
+        Email: <input type="text" name="email">
+        <input type="submit" name="update" value="Actualizar">
+    </form>
+
+    <h2>Borrar Usuario</h2>
+    <form method="post">
+        ID: <input type="text" name="id">
+        <input type="submit" name="delete" value="Borrar">
+    </form>
+</body>
+</html>
+
+7. Cerrar Conexión
+<?php
+$conn->close();
+?>
+
+
+Este es un ejemplo básico y funcional de un CRUD en PHP. Puedes adaptarlo y mejorarlo según tus necesidades específicas. ¡Espero que te sea útil!
