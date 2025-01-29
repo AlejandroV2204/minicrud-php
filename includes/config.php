@@ -1,3 +1,3 @@
 <?php
-define('BASE_URL', '/mi_proyecto_crud/');
+define('BASE_URL', '/minicrud-php/');
 ?>
